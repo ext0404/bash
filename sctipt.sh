@@ -26,10 +26,10 @@ mysqladmin -u root password
 apt-get install -y php-mysql
 apt-get install -y phpmyadmin #Криво устанавливается
 wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ https://raw.githubusercontent.com/KillingNature/configs/main/phpmyadmin.conf
-sed -i -e "s/#Name/php.$DOMAIN/g" /etc/nginx/sites-enabled/phpmyadmin.conf
+sed -i -e "s/substitutehere/php.$DOMAIN/g" /etc/nginx/sites-enabled/phpmyadmin.conf
 my_ip=$(ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}') #IP устройства
 sed -i "1s/^/$my_ip $DOMAIN\n/" /etc/hosts
-sed -i -e "s/#Name/$DOMAIN/g" /etc/nginx/sites-enabled/default.conf
+sed -i -e "s/substitutehere/$DOMAIN/g" /etc/nginx/sites-enabled/default.conf
 systemctl reload nginx
 apt-get install -y memcached php-memcached
 systemctl enable memcached

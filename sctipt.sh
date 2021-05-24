@@ -4,14 +4,14 @@
 # sudo su
 apt-get -y update
 # ufw
-ufw allow 22,25,80,443,465,587,8080,60000:65535/tcp
+ufw allow 20,21,22,25,80,443,465,587,8080,60000:65535/tcp
 # Nginx
 apt install -y nginx
 apt install -y php7.4-cli php7.4-fpm php7.4-curl php7.4-gd php7.4-mysql php7.4-mbstring zip unzip
 systemctl enable nginx
 
 rm /etc/nginx/sites-enabled/default
-wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ https://raw.githubusercontent.com/KillingNature/configs/main/default.conf
+wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ https://raw.githubusercontent.com/ext0404/bash/main/default.conf
 echo -e "\e[31mВведите полное имя домена:\e[0m"
 read DOMAIN
 mkdir /var/www/$DOMAIN
@@ -25,11 +25,11 @@ echo -e "\e[31mЗадайте пароль для для root на БД:\e[0m"
 mysqladmin -u root password
 apt-get install -y php-mysql
 apt-get install -y phpmyadmin #Криво устанавливается
-wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ https://raw.githubusercontent.com/KillingNature/configs/main/phpmyadmin.conf
-sed -i -e "s/substitutehere/php.$DOMAIN/g" /etc/nginx/sites-enabled/phpmyadmin.conf
+wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ https://raw.githubusercontent.com/ext0404/bash/main/phpmyadmin.conf
+sed -e -i "s/substitutehere/php.$DOMAIN/g" > /etc/nginx/sites-enabled/phpmyadmin.conf
 my_ip=$(ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}') #IP устройства
 sed -i "1s/^/$my_ip $DOMAIN\n/" /etc/hosts
-sed -i -e "s/substitutehere/$DOMAIN/g" /etc/nginx/sites-enabled/default.conf
+sed -e -i  "s/substitutehere/$DOMAIN/g" > /etc/nginx/sites-enabled/default.conf
 systemctl reload nginx
 apt-get install -y memcached php-memcached
 systemctl enable memcached
@@ -67,13 +67,15 @@ case "$agree" in
     echo "pasv_enable=Yes" >> /etc/vsftpd.conf
     echo "pasv_min_port="$PORT1  >> /etc/vsftpd.conf
     echo "pasv_max_port="$PORT2 >> /etc/vsftpd.conf
-        
+
+    ufw allow 20,21,$PORT1:$PORT2/tcp
+
         ;;
     *) 
         break
         ;;
 esac
-ufw allow 20,21,$PORT1:$PORT2/tcp
+
 
 
 echo "Разрешить использование IPv6? [Y/N]" #по дефолту - разрешен

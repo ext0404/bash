@@ -11,7 +11,7 @@ apt install -y php7.4-cli php7.4-fpm php7.4-curl php7.4-gd php7.4-mysql php7.4-m
 systemctl enable nginx
 
 rm /etc/nginx/sites-enabled/default
-wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ https://raw.githubusercontent.com/ext0404/bash/main/default.conf
+wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ https://raw.githubusercontent.com/ext0404/bash/main/nginx.conf
 echo -e "\e[31mВведите полное имя домена:\e[0m"
 read DOMAIN
 mkdir /var/www/$DOMAIN

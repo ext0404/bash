@@ -29,7 +29,8 @@ wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ h
 sed -i "s/substitutehere/php.$DOMAIN/g" /etc/nginx/sites-enabled/phpmyadmin.conf
 my_ip=$(ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}') #IP устройства
 sed -i "1s/^/$my_ip $DOMAIN\n/" /etc/hosts
-sed -i "s/substitutehere/$DOMAIN/g" /etc/nginx/sites-enabled/default.conf
+sed -i "s/substitutehere/$DOMAIN/g" /etc/nginx/sites-enabled/nginx.conf
+cp /etc/nginx/sites-enabled/nginx.conf /etc/nginx/sites-enabled/default.conf
 systemctl reload nginx
 apt-get install -y memcached php-memcached
 systemctl enable memcached
@@ -122,7 +123,7 @@ echo -e     "userlist_enable=YES
 
 
 systemctl restart vsftpd
-
+systemctl restart nginx
 echo -e "\e[31mДобавьте вручную $my_ip $DOMAIN и $my_ip php.$DOMAIN в файл hosts\e[0m"
         
 # Проверка сервера в GUI:

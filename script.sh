@@ -11,7 +11,7 @@ apt install -y php7.4-cli php7.4-fpm php7.4-curl php7.4-gd php7.4-mysql php7.4-m
 systemctl enable nginx
 
 rm /etc/nginx/sites-enabled/default
-wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ https://raw.githubusercontent.com/ext0404/bash/main/nginx.conf
+wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ https://raw.githubusercontent.com/ext0404/bash/main/default.conf
 echo -e "\e[31mВведите полное имя домена:\e[0m"
 read DOMAIN
 mkdir /var/www/$DOMAIN
@@ -29,8 +29,8 @@ wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ h
 sed -i "s/substitutehere/php.$DOMAIN/g" /etc/nginx/sites-enabled/phpmyadmin.conf
 my_ip=$(ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}') #IP устройства
 sed -i "1s/^/$my_ip $DOMAIN\n/" /etc/hosts
-sed -i "s/substitutehere/$DOMAIN/g" /etc/nginx/sites-enabled/nginx.conf
-cp /etc/nginx/sites-enabled/nginx.conf /etc/nginx/sites-enabled/default.conf
+sed -i "s/substitutehere/$DOMAIN/g" /etc/nginx/sites-enabled/default.conf
+#cp /etc/nginx/sites-enabled/nginx.conf /etc/nginx/sites-enabled/default.conf
 systemctl reload nginx
 apt-get install -y memcached php-memcached
 systemctl enable memcached

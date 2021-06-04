@@ -104,8 +104,8 @@ echo "ssl_tlsv1=YES" >> /etc/vsftpd.conf
 
 #Создаем пользователя
 echo -e "\e[31mУкажите имя FTP пользователя:\e[0m"
-read $USER
-adduser  $USERNAME
+read USERNAME
+useradd $USERNAME
 
 mkdir /home/$USERNAME/ftp
 chown nobody:nogroup /home/$USERNAME/ftp

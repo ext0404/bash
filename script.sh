@@ -26,10 +26,10 @@ mysqladmin -u root password
 apt-get install -y php-mysql
 apt-get install -y phpmyadmin #Криво устанавливается
 wget --no-check-certificate --content-disposition -P /etc/nginx/sites-enabled/ https://raw.githubusercontent.com/ext0404/bash/main/phpmyadmin.conf
-sed -i "s/substitutehere/php.$DOMAIN/g" /etc/nginx/sites-enabled/phpmyadmin.conf
+sed -i "s/example.com/php.$DOMAIN/g" /etc/nginx/sites-enabled/phpmyadmin.conf
 my_ip=$(ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}') #IP устройства
 sed -i "1s/^/$my_ip $DOMAIN\n/" /etc/hosts
-sed -i "s/substitutehere/$DOMAIN/g" /etc/nginx/sites-enabled/default.conf
+sed -i "s/example.com/$DOMAIN/g" /etc/nginx/sites-enabled/default.conf
 #cp /etc/nginx/sites-enabled/nginx.conf /etc/nginx/sites-enabled/default.conf
 systemctl reload nginx
 apt-get install -y memcached php-memcached
@@ -104,17 +104,17 @@ echo "ssl_tlsv1=YES" >> /etc/vsftpd.conf
 
 #Создаем пользователя
 echo -e "\e[31mУкажите имя FTP пользователя:\e[0m"
-read USER
-adduser  $USER
+read $USER
+adduser  $USERNAME
 
-mkdir /home/$USER/ftp
-chown nobody:nogroup /home/$USER/ftp
-chmod a-w /home/$USER/ftp
+mkdir /home/$USERNAME/ftp
+chown nobody:nogroup /home/$USERNAME/ftp
+chmod a-w /home/$USERNAME/ftp
 
 
 echo "chroot_local_user=YES" >> /etc/vsftpd.conf
-echo "user_sub_token=$USER" >> /etc/vsftpd.conf
-echo "local_root=/home/$USER/ftp" >> /etc/vsftpd.conf
+echo "user_sub_token=$USERNAME" >> /etc/vsftpd.conf
+echo "local_root=/home/$USERNAME/ftp" >> /etc/vsftpd.conf
 
 echo -e     "userlist_enable=YES
             \nuserlist_file=/etc/vsftpd.userlist

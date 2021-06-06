@@ -105,22 +105,34 @@ echo "ssl_tlsv1=YES" >> /etc/vsftpd.conf
 #Создаем пользователя
 echo -e "\e[31mУкажите имя FTP пользователя:\e[0m"
 read USERNAME
-adduser $USERNAME www-data
+adduser $USERNAME
 
-mkdir /home/$USERNAME/ftp
-chown -R www-data:www-data /var/www/$DOMAIN
-chmod -R g+rw /var/www/$DOMAIN
-chown nobody:nogroup /home/$USERNAME/ftp
-chmod a-w /home/$USERNAME/ftp
-
+groupadd ftpusers
+usermod -G ftpusers $USERNAME
 
 echo "chroot_local_user=YES" >> /etc/vsftpd.conf
 echo "user_sub_token=$USERNAME" >> /etc/vsftpd.conf
-echo "local_root=/home/$USERNAME/ftp" >> /etc/vsftpd.conf
+echo "local_root=/home/$USERNAME/" >> /etc/vsftpd.conf
 
-echo -e     "userlist_enable=YES
-            \nuserlist_file=/etc/vsftpd.userlist
-            \nuserlist_deny=NO"                        >> /etc/vsftpd.conf  
+mkdir /home/$USERNAME/ftp
+# chown -R www-data:www-data /var/www/$DOMAIN
+# chmod -R g+rw /var/www/$DOMAIN
+
+mkdir /home/$USERNAME/www
+mkdir /home/$USERNAME/logs
+
+chown user:ftpusers /home/$USERNAME/www
+chown user:ftpusers /home/$USERNAME/logs
+chmod 555 /home/$USERNAME
+
+
+
+
+
+
+#echo -e     "userlist_enable=YES
+#            \nuserlist_file=/etc/vsftpd.userlist
+#           \nuserlist_deny=NO"                        >> /etc/vsftpd.conf  
 
 
 
